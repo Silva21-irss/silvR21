@@ -1,0 +1,21 @@
+Package: silvR21
+Title: Processing Tools for the Silva21 Project
+Version: 0.1.0
+Author: Michael Burnett
+Maintainer: Michael Burnett <mdmbur19@mail.ubc.ca>
+Description: More about what it does (maybe more than one line)
+    Use four spaces when indenting paragraphs within the Description.
+License: MIT + file LICENSE
+Imports: 
+    dplyr,
+    raster,
+    sf,
+    stringr,
+    terra,
+    tools
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
