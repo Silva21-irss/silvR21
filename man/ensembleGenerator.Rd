@@ -30,9 +30,12 @@ ensembleGenerator(
 Directory with ensemble files as CSVs
 }
 \description{
-ClimateNA Ensemble Generator
+This function uses the desired SSPs and variables to generate averaged ensembles. Its outputs will consist of a series of ensemble CSV files, each consisting of the average value for each variable under every SSP scenario and time frames.
 }
 \examples{
 #files <- list.files(pattern='*.csv$') # Access all CSV files
 #ensembleGenerator(files) # Generate ensemble using the default parameters
+}
+\author{
+Michael Burnett - UBC Faculty of Forestry
 }

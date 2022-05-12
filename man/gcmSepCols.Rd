@@ -13,9 +13,12 @@ gcmSepCols(files)
 List
 }
 \description{
-Separate Components of ClimateNA File Names
+Using the file names from the projected ClimateNA future models data, a data frame splitting up the components of the file name (time frames, SSPs, and GCM models).
 }
 \examples{
 files <- list.files()
 models <- gcmSepCols(files)
+}
+\author{
+Michael Burnett - UBC Faculty of Forestry
 }

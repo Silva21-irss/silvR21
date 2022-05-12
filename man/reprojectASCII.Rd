@@ -19,11 +19,14 @@ reprojectASCII(file, direc = getwd(), NAflag = -9999, projection = "EPSG:4326")
 Same ASCII file reprojected
 }
 \description{
-Reproject ASCII raster file
+Reads and reprojects an ASCII raster file following the data acquisition with ClimateNA (or any alternative source).
 }
 \examples{
 files <- list.files(pattern='*asc$')
 for(i in files){
   reprojectASCII(i,NAflag = 32647)
 }
+}
+\author{
+Michael Burnett - UBC Faculty of Forestry
 }

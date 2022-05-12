@@ -1,10 +1,14 @@
 #' Calculate the Annual and Seasonal Summary Values from Monthly ClimateNA Variables
 #'
+#' This function uses the monthly variables provided by ClimateNA and constructs the annual and seasonal averages/sums for each variable in new columns of the data frame. Averages are calculated for all temperature, solar radiation, and relative humidity values. Sums are calculated for all other variables. This only works with the CSV option in ClimateNA.
+#'
 #' @param item CSV file containing monthly (NOT primary monthly) ClimateNA variables.
 #' @param var Climate variables desired for mean/sum calculations based on annual and seasonal distributions (seasons based on months, not true seasons).  Options include : Tmax, Tmin, Tave, PPT, Rad, DD_5, DD5, DD_18, DD18, NFFD, PAS, Eref, CMD, RH, CMI.  Mean values are calculated for temperature, solar radiation, and relative humidity.  Summed values are calculated for all other variables. Default value indicates only Tmax, Tmin, PPT, DD5, NFFD, PAS, and CMI.
 #'
 #' @return An expanded data frame
 #' @export
+#'
+#' @author Michael Burnett - UBC Faculty of Forestry
 #'
 #' @examples
 #' ### Processing a single file

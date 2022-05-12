@@ -1,8 +1,13 @@
 #' Separate Components of ClimateNA File Names
 #'
+#' Using the file names from the projected ClimateNA future models data, a data frame splitting up the components of the file name (time frames, SSPs, and GCM models).
+#'
 #' @param files A list of ClimateNA future projection outputs.
 #'
 #' @return List
+#'
+#' @author Michael Burnett - UBC Faculty of Forestry
+#'
 #' @export
 #'
 #' @examples

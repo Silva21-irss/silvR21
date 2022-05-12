@@ -1,5 +1,7 @@
 #' Reproject ASCII raster file
 #'
+#' Reads and reprojects an ASCII raster file following the data acquisition with ClimateNA (or any alternative source).
+#'
 #' @param file ASCII file that requires reprojection
 #' @param direc The working directory. This needs to be the same directory as the file location so the basename can be drawn and the reprojected ASCII file can be written.
 #' @param NAflag NA value within the raster to mask when reprojecting.
@@ -11,6 +13,7 @@
 #' @importFrom terra rast
 #' @importFrom terra writeRaster
 #'
+#' @author Michael Burnett - UBC Faculty of Forestry
 #'
 #' @examples
 #' files <- list.files(pattern='*asc$')

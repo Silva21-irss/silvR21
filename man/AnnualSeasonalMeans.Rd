@@ -18,7 +18,7 @@ AnnualSeasonalMeans(
 An expanded data frame
 }
 \description{
-Calculate the Annual and Seasonal Summary Values from Monthly ClimateNA Variables
+This function uses the monthly variables provided by ClimateNA and constructs the annual and seasonal averages/sums for each variable in new columns of the data frame. Averages are calculated for all temperature, solar radiation, and relative humidity values. Sums are calculated for all other variables. This only works with the CSV option in ClimateNA.
 }
 \examples{
 ### Processing a single file
@@ -33,4 +33,7 @@ for(i in files){
   item <- AnnualSeasonalMeans(item)
   write.csv(item,i)
 }
+}
+\author{
+Michael Burnett - UBC Faculty of Forestry
 }

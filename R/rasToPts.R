@@ -1,9 +1,13 @@
 #' List of Rasters To Shapefile Points
 #'
+#' Use a list of rasters in a directory (ASCII output files from ClimateNA) to produce point feature class shapefiles.
+#'
 #' @param files A list of raster files.
 #'
 #' @return Point Featureclass Shapefile
 #' @export
+#'
+#' @author Michael Burnett - UBC Faculty of Forestry
 #'
 #' @examples
 #' files <- list.files(pattern='*asc$') # Access all ASCII raster files in directory

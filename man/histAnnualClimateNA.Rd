@@ -4,28 +4,30 @@
 \alias{histAnnualClimateNA}
 \title{Access Annual Historical ClimateNA Data}
 \usage{
-histAnnualClimateNA(file, dateR, tFrame, exe, direc = getwd())
+histAnnualClimateNA(file, dateR, tFrame, exe)
 }
 \arguments{
-\item{file}{the prepared DEM as a CSV file. Full file name is required.}
+\item{file}{the prepared DEM as a CSV file.}
 
 \item{dateR}{the historical year for the climate data. Make sure it is in the number format of 'XXXX'.}
 
-\item{tFrame}{the averaged time frame of each climate variable. Use 'M' for monthly, 'A' for annual, and 'S' for seasonal}
+\item{tFrame}{the averaged time frame of each climate variable. Use 'M' for monthly, 'Y' for annual, and 'S' for seasonal}
 
-\item{exe}{Full name of the ClimateNA exe file. Make sure that your working directory is the folder in which this file is located in.}
-
-\item{direc}{a character vector of full path name to the directory where the ClimateNA app is located.}
+\item{exe}{Full name of the ClimateNA exe file.}
 }
 \value{
 A CSV file with historical climate data in the current directory
 }
 \description{
-Access Annual Historical ClimateNA Data
+This is a specialty function that has several preliminary requirements. The output produces the  historical climate variables for the provided CSV file.
+In order to properly use this function, you must prepare the CSV file so that it is compatible with the ClimateNA requirements (using the demToCSV tool).
 }
 \examples{
 #setwd("E:/Climatena_v721");getwd() # Set up location for the application
 #exe <- "E:/Climatena_v721/ClimateNA_v7.21.exe"
 #files <- list.files(pattern = '*.csv$')
 #histAnnualClimateNA(files[1],'1981','M',exe)
+}
+\author{
+Michael Burnett - UBC Faculty of Forestry
 }

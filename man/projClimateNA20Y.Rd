@@ -10,30 +10,27 @@ projClimateNA20Y(
   exe,
   scen = c("ACC", "CNRM", "EC", "GFDL", "GISS", "MIR", "MPI", "MRI", "UK"),
   ssp = c("S1", "S2", "S3"),
-  years = c("Y2", "Y3", "Y4", "Y5"),
-  direc = getwd()
+  years = c("Y2", "Y3", "Y4", "Y5")
 )
 }
 \arguments{
-\item{file}{The prepared DEM as a CSV file. Full file name is required. NOTE: Best success is found if file name is the name of hub site follwed by '_DEM.csv' to ensure sufficient folder naming conventions.}
+\item{file}{The prepared DEM as a CSV file. This file must be located within the same directory which the ClimateNA application is located.}
 
-\item{tFrame}{The averaged time frame of each climate variable. Use 'M' for monthly, 'A' for annual, and 'S' for seasonal}
+\item{tFrame}{The averaged time frame of each climate variable. Use 'M' for monthly, 'Y' for annual, and 'S' for seasonal}
 
-\item{exe}{File name of the ClimateNA exe file}
+\item{exe}{File name of the ClimateNA exe file. This must be located within the current working directory.}
 
-\item{scen}{The GCM selection. Options include : '13GCM' (13GCMs_ensemble); 'ACC' (ACCESS-ESM1-5); 'BCC' (BCC-CSM2-MR); 'CAN' (CanESM5); 'CNRM' (CNRM-ESM2-1); 'EC' (EC-Earth3); 'GFDL' (GFDL-ESM4); 'GISS' (GISS-E2-1-G); 'INM' (INM-CM5-0); 'ISPL' (IPSL-CM6A-LR); 'MIR' (MIROC6); 'MPI' (MPI-ESM1-2-HR); 'MRI' (MRI-ESM2-0); 'UK' (UKESM1-0-LL). As default, only the scenarios used by Amy Wotherspoon for Silva21 are selected.}
+\item{scen}{The GCM selection. Options include : '8GCM' (8GCMs_ensemble); '13GCM' (13GCMs_ensemble); 'ACC' (ACCESS-ESM1-5); 'BCC' (BCC-CSM2-MR); 'CAN' (CanESM5); 'CNRM' (CNRM-ESM2-1); 'EC' (EC-Earth3); 'GFDL' (GFDL-ESM4); 'GISS' (GISS-E2-1-G); 'INM' (INM-CM5-0); 'ISPL' (IPSL-CM6A-LR); 'MIR' (MIROC6); 'MPI' (MPI-ESM1-2-HR); 'MRI' (MRI-ESM2-0); 'UK' (UKESM1-0-LL). As default, only the scenarios used by Amy Wotherspoon for Silva21 are selected.}
 
 \item{ssp}{The SSP scenario selection. Options include : 'S1' (ssp126); 'S2' (ssp245); 'S3' (ssp370); 'S5' (ssp585).}
 
 \item{years}{The 20-years time frames selection. Options include : 'Y1' (2001-2020); 'Y2' (2021-2040); 'Y3' (2041-2060); 'Y4' (2061-2080); 'Y5' (2081-2100).}
-
-\item{direc}{A character vector of full path name to the directory where the ClimateNA app is located.}
 }
 \value{
 CSV files within a new folder within the current directory
 }
 \description{
-Access 20 Years Average Climate Projections from ClimateNA
+This is a specialty function that has several preliminary requirements. The output produces the projected climate variables for the provided CSV file. In order to properly use this function, the following steps much be taken. The steps include : 1. Set the working directory to where the ClimateNA app is on your computer. 2. Prepare the CSV file so that it is compatible with the ClimateNA requirements. 3. Copy the CSV file so it is located within the ClimateNA app directory.
 }
 \examples{
 rm(list=ls())
@@ -45,4 +42,7 @@ rm(list=ls())
 ## Access specific climate scenarios
 #projClimateNA20Y(files[1],'M',exe,c('ACC','BCC','MRI','UK'),c('S2','S3'))
 #projClimateNA20Y(files[2],'M',exe,getwd()) # Access all climate scenarios
+}
+\author{
+Michael Burnett - UBC Faculty of Forestry
 }

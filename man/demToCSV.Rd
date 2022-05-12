@@ -15,10 +15,13 @@ demToCSV(file, outdir = getwd())
 A CSV file representing the inputted DEM
 }
 \description{
-Convert a Raster DEM file to a Useable CSV that can be inputted into ClimateNA
+Input a TIFF file containing the DEM elevation values clipped to the area of focus. This tool will convert and produce a point featureclass shapefile with an identical name and use that shapefile's points and point coordinates to produce a CSV file. This CSV file is formatted so it can be inputted into ClimateNA.
 }
 \examples{
 #files <- list.files(pattern='*.tif$')
 #roiDEM <- files[3]
 #demToCSV(roiDEM)
+}
+\author{
+Michael Burnett - UBC Faculty of Forestry
 }
