@@ -1,4 +1,5 @@
 # SilvR21 
+![license](https://img.shields.io/badge/License-R--package-green) 
 R package for accessing and processing climate data from ClimateNA with the Silva21 project.
 The **silvR21** package provides functions to prepare Digital Elevation Models (DEM) as TIFF files into CSV files, access historical and future projected climate data, and process the files in a similar fashion to how it has been used thus far within Silva21. Annual and seasonal means/sums can be computed from monthly data along with personalized GCM ensemble generators.
 
