@@ -2,11 +2,12 @@
 #'
 #' This is a specialty function that has several preliminary requirements. The output produces the 10 years averaged historical climate variables for the provided CSV file.
 #' In order to properly use this function, you must prepare the CSV file so that it is compatible with the ClimateNA requirements (using the demToCSV tool).
+#' The working directory must be set to the location which the ClimateNA app is located.
 #'
 #' @param file the prepared DEM as a CSV file.
 #' @param dateR the historical date range for the climate data. Make sure it is in the 10 years format of 'XXX1_XXX0'. Underscore is necessary, as opposed to dash.
 #' @param tFrame the averaged time frame of each climate variable. Use 'M' for monthly, 'Y' for annual, and 'S' for seasonal
-#' @param exe Full name of the ClimateNA exe file.
+#' @param exe Full name of the ClimateNA exe file. The working directory must be the location of this file.
 #'
 #' @return A CSV file with historical climate data in the current directory
 #' @export

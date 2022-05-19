@@ -1,6 +1,6 @@
 #' Access 20 Years Average Climate Projections from ClimateNA
 #'
-#' This is a specialty function that has several preliminary requirements. The output produces the projected climate variables for the provided CSV file. In order to properly use this function, the following steps much be taken. The steps include : 1. Set the working directory to where the ClimateNA app is on your computer. 2. Prepare the CSV file so that it is compatible with the ClimateNA requirements. 3. Copy the CSV file so it is located within the ClimateNA app directory.
+#' This is a specialty function that has several preliminary requirements for accessing climate projections within a given site. The output produces the projected climate variables for the provided CSV file. In order to properly use this function, the following steps much be taken. The steps include : 1. Set the working directory to where the ClimateNA app is located on your computer. 2. Prepare the CSV file so that it is compatible with the ClimateNA requirements. 3. Relocate the CSV file so it is located within the ClimateNA app directory.
 #'
 #' @param file The prepared DEM as a CSV file. This file must be located within the same directory which the ClimateNA application is located.
 #' @param tFrame The averaged time frame of each climate variable. Use 'M' for monthly, 'Y' for annual, and 'S' for seasonal
@@ -26,6 +26,7 @@
 #' #projClimateNA20Y(files[2],'M',exe,getwd()) # Access all climate scenarios
 projClimateNA20Y <- function(file,tFrame,exe,scen = c('ACC','CNRM','EC','GFDL','GISS','MIR','MPI','MRI','UK'),ssp = c('S1','S2','S3'),years = c('Y2','Y3','Y4','Y5')){
   direc = dirname(exe)
+  file = basename(file)
   GCMs20 <- list.files(path=paste0(direc,'/GCMdat/20YearPeriod'))
 
   sce <- list()
