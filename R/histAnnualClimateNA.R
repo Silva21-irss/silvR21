@@ -8,9 +8,10 @@
 #' @param dateR the historical year for the climate data. Make sure it is in the number format of 'XXXX'.
 #' @param tFrame the averaged time frame of each climate variable. Use 'M' for monthly, 'Y' for annual, and 'S' for seasonal
 #' @param exe Full name of the ClimateNA exe file. The working directory must be the location of this file.
+#' @param outdir The output directory for the climate data. As a default, it will be outputted to the same location as the input CSV file.
 #'
 #'
-#' @return A CSV file with historical climate data in the current directory
+#' @return A CSV file with historical climate data
 #' @export
 #'
 #' @author Michael Burnett - UBC Faculty of Forestry
@@ -20,11 +21,10 @@
 #' #exe <- "E:/Climatena_v721/ClimateNA_v7.21.exe"
 #' #files <- list.files(pattern = '*.csv$')
 #' #histAnnualClimateNA(files[1],'1981','M',exe)
-histAnnualClimateNA <- function(file,dateR,tFrame,exe){
-  direc <- dirname(file)
+histAnnualClimateNA <- function(file,dateR,tFrame,exe,outdir = dirname(file)){
   fileN <- basename(file)
   yearPeriod <- paste0('/Year_',dateR,'.ann')
-  inputFile <- paste0('/',gsub('/','\\\\',direc),'\\',fileN)
-  outputFile <- paste0('/',gsub('/','\\\\',direc),'\\',substr(fileN,1,nchar(fileN)-4),'_',dateR,'.csv')
+  inputFile <- paste0('/',gsub('/','\\\\',dirname(file)),'\\',fileN)
+  outputFile <- paste0('/',gsub('/','\\\\',outdir),'\\',substr(fileN,1,nchar(fileN)-4),'_',dateR,'.csv')
   system2(exe,args= c(paste0('/',tFrame), yearPeriod, inputFile, outputFile))
 }

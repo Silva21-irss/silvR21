@@ -1,0 +1,21 @@
+---
+title: "Climate Data Acquisition with ClimateNA"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{silvR21_vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+This is currently a work in progress. Please come back for silvR21 version 1.2.0
+```{r setup}
+library(silvR21)
+
+
+```

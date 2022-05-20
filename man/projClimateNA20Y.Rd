@@ -30,7 +30,7 @@ projClimateNA20Y(
 CSV files within a new folder within the current directory
 }
 \description{
-This is a specialty function that has several preliminary requirements. The output produces the projected climate variables for the provided CSV file. In order to properly use this function, the following steps much be taken. The steps include : 1. Set the working directory to where the ClimateNA app is on your computer. 2. Prepare the CSV file so that it is compatible with the ClimateNA requirements. 3. Copy the CSV file so it is located within the ClimateNA app directory.
+This is a specialty function that has several preliminary requirements for accessing climate projections within a given site. The output produces the projected climate variables for the provided CSV file. In order to properly use this function, the following steps much be taken. The steps include : 1. Set the working directory to where the ClimateNA app is located on your computer. 2. Prepare the CSV file so that it is compatible with the ClimateNA requirements. 3. Relocate the CSV file so it is located within the ClimateNA app directory.
 }
 \examples{
 rm(list=ls())

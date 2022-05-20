@@ -4,7 +4,7 @@
 \alias{histAnnualClimateNA}
 \title{Access Annual Historical ClimateNA Data}
 \usage{
-histAnnualClimateNA(file, dateR, tFrame, exe)
+histAnnualClimateNA(file, dateR, tFrame, exe, outdir = dirname(file))
 }
 \arguments{
 \item{file}{the prepared DEM as a CSV file.}
@@ -13,14 +13,17 @@ histAnnualClimateNA(file, dateR, tFrame, exe)
 
 \item{tFrame}{the averaged time frame of each climate variable. Use 'M' for monthly, 'Y' for annual, and 'S' for seasonal}
 
-\item{exe}{Full name of the ClimateNA exe file.}
+\item{exe}{Full name of the ClimateNA exe file. The working directory must be the location of this file.}
+
+\item{outdir}{The output directory for the climate data. As a default, it will be outputted to the same location as the input CSV file.}
 }
 \value{
-A CSV file with historical climate data in the current directory
+A CSV file with historical climate data
 }
 \description{
 This is a specialty function that has several preliminary requirements. The output produces the  historical climate variables for the provided CSV file.
 In order to properly use this function, you must prepare the CSV file so that it is compatible with the ClimateNA requirements (using the demToCSV tool).
+The working directory must be set to the location which the ClimateNA app is located.
 }
 \examples{
 #setwd("E:/Climatena_v721");getwd() # Set up location for the application
