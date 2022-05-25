@@ -1,9 +1,10 @@
 #' ClimateNA Ensemble Generator
 #'
-#' This function uses the desired SSPs and variables to generate averaged ensembles. Its outputs will consist of a series of ensemble CSV files, each consisting of the average value for each variable under every SSP scenario and time frames.
+#' This function uses the desired SSPs and variables to generate averaged ensembles. Its outputs will consist of a series of ensemble CSV files, each consisting of the average value for each variable under every SSP scenario and time frames. This function is only used with monthly data outputs.
 #'
 #' @param files The list of files provided by the projClimateNA20Y output, after using the AnnualSeasonalMeans function to process annual and seasonal averages/sums.
 #' @param outdir The output directory to store the ensembles. This does not need to be the current working directory.
+#' @param tFrame The variable time frames included in the climate data. If the AnnualSeasonalMeans tool has been used, then the default value is desired. Otherwise, 'M' represents monthly, 'S' represents seasonal, and 'Y' represents annual time frames.
 #' @param var The desired variables to produce averages of. Variables include : 'Tmax','Tmin','Tavg','PPT','Rad','DD_0','DD5','DD18','DD_18','NFFD','CMI','PAS','Eref','CMD','RH'. Default value includes 'Tmin','Tmax','PPT','DD5_','NFFD','CMI','PAS'.
 #' @param ssp The SSP scenarios. 'S1' = 'ssp126' ; 'S2' = 'ssp245' ; 'S3' = 'ssp370' ; 'S5' = 'ssp585'. Default value is c('S1','S2','S3').
 #' @param years The 20-years time frames selection. Options include : 'Y1' (2001-2020); 'Y2' (2021-2040); 'Y3' (2041-2060); 'Y4' (2061-2080); 'Y5' (2081-2100).
@@ -21,7 +22,7 @@
 #' @examples
 #' #files <- list.files(pattern='*.csv$') # Access all CSV files
 #' #ensembleGenerator(files) # Generate ensemble using the default parameters
-ensembleGenerator <- function(files,outdir = getwd(),var = c('Tmax','Tmin','PPT','DD5','NFFD','PAS','CMI'),ssp = c('S1','S2','S3'),years = c('Y2','Y3','Y4','Y5'),concatenate=TRUE){
+ensembleGenerator <- function(files,outdir = getwd(),tFrame = c('M','S','Y'),var = c('Tmax','Tmin','PPT','DD5','NFFD','PAS','CMI'),ssp = c('S1','S2','S3'),years = c('Y2','Y3','Y4','Y5'),concatenate=TRUE){
   #library(stringr)
 
   # SSPs <- list()
@@ -58,52 +59,84 @@ ensembleGenerator <- function(files,outdir = getwd(),var = c('Tmax','Tmin','PPT'
   }
 
   GCM.var <- c("ID","Latitude","Longitude","Elevation")
+
   #if(is.null(var)){var <- c('Tmax','Tmin','PPT','DD5_','NFFD','PAS','CMI')}
-  if('Tmax' %in% var){GCM.var <- append(GCM.var,c("Tmax01","Tmax02","Tmax03","Tmax04","Tmax05","Tmax06","Tmax07","Tmax08","Tmax09","Tmax10","Tmax11","Tmax12","ANNUAL_Tmax","WINTER_Tmax","SUMMER_Tmax","SPRING_Tmax","AUTUMN_Tmax"))
-  }
-  if('Tmin' %in% var){GCM.var <- append(GCM.var,c("Tmin01","Tmin02","Tmin03","Tmin04","Tmin05","Tmin06","Tmin07","Tmin08","Tmin09","Tmin10","Tmin11","Tmin12","ANNUAL_Tmin","WINTER_Tmin","SUMMER_Tmin","SPRING_Tmin","AUTUMN_Tmin"))
-  }
-  if('Tave' %in% var){GCM.var <- append(GCM.var,c("Tave01","Tave02","Tave03","Tave04","Tave05","Tave06","Tave07","Tave08","Tave09","Tave10","Tave11","Tave12","ANNUAL_Tave","WINTER_Tave","SUMMER_Tave","SPRING_Tave","AUTUMN_Tave"))
-  }
-  if('PPT' %in% var){GCM.var <- append(GCM.var,c("PPT01","PPT02","PPT03","PPT04","PPT05","PPT06","PPT07","PPT08","PPT09","PPT10","PPT11","PPT12","ANNUAL_PPT","WINTER_PPT","SUMMER_PPT","SPRING_PPT","AUTUMN_PPT"))
-  }
-  if('DD5' %in% var){GCM.var <- append(GCM.var,c("DD5_01","DD5_02","DD5_03","DD5_04","DD5_05","DD5_06","DD5_07","DD5_08","DD5_09","DD5_10","DD5_11","DD5_12","ANNUAL_DD5","WINTER_DD5","SUMMER_DD5","SPRING_DD5","AUTUMN_DD5"))
-  }
-  if('NFFD' %in% var){GCM.var <- append(GCM.var,c("NFFD01","NFFD02","NFFD03","NFFD04","NFFD05","NFFD06","NFFD07","NFFD08","NFFD09","NFFD10","NFFD11","NFFD12","ANNUAL_NFFD","WINTER_NFFD","SUMMER_NFFD","SPRING_NFFD","AUTUMN_NFFD"))
-  }
-  if('PAS' %in% var){GCM.var <- append(GCM.var,c("PAS01","PAS02","PAS03","PAS04","PAS05","PAS06","PAS07","PAS08","PAS09","PAS10","PAS11","PAS12","ANNUAL_PAS","WINTER_PAS","SUMMER_PAS","SPRING_PAS","AUTUMN_PAS"))
-  }
-  if('CMI' %in% var){GCM.var <- append(GCM.var,c("CMI01","CMI02","CMI03","CMI04","CMI05","CMI06","CMI07","CMI08","CMI09","CMI10","CMI11","CMI12","ANNUAL_CMI","WINTER_CMI","SUMMER_CMI","SPRING_CMI","AUTUMN_CMI"))
-  }
   mnts <- sprintf('%0.2d',1:12) # Make months list
-  seas <- c('ANNUAL_','WINTER_','SPRING_','SUMMER_','AUTUMN_')
+  seas <- c('wt','sm','sp','at')
+  if('Tmax' %in% var){
+    if('M' %in% tFrame){for(a in mnts){GCM.var <- append(GCM.var,paste0('Tmax',a))}}
+    if('S' %in% tFrame){for(b in seas){GCM.var <- append(GCM.var,paste0('Tmax_',b))}}
+    if('Y' %in% tFrame){GCM.var <- append(GCM.var,'Tmax')}
+  }
+  if('Tmin' %in% var){
+    if('M' %in% tFrame){for(a in mnts){GCM.var <- append(GCM.var,paste0('Tmin',a))}}
+    if('S' %in% tFrame){for(b in seas){GCM.var <- append(GCM.var,paste0('Tmin_',b))}}
+    if('Y' %in% tFrame){GCM.var <- append(GCM.var,'Tmin')}
+  }
+  if('Tave' %in% var){
+    if('M' %in% tFrame){for(a in mnts){GCM.var <- append(GCM.var,paste0('Tave',a))}}
+    if('S' %in% tFrame){for(b in seas){GCM.var <- append(GCM.var,paste0('Tave_',b))}}
+    if('Y' %in% tFrame){GCM.var <- append(GCM.var,'Tave')}
+  }
+  if('PPT' %in% var){
+    if('M' %in% tFrame){for(a in mnts){GCM.var <- append(GCM.var,paste0('PPT',a))}}
+    if('S' %in% tFrame){for(b in seas){GCM.var <- append(GCM.var,paste0('PPT_',b))}}
+    if('Y' %in% tFrame){GCM.var <- append(GCM.var,'PPT')}
+  }
+  if('DD5' %in% var){
+    if('M' %in% tFrame){for(a in mnts){GCM.var <- append(GCM.var,paste0('DD5_',a))}}
+    if('S' %in% tFrame){for(b in seas){GCM.var <- append(GCM.var,paste0('DD5_',b))}}
+    if('Y' %in% tFrame){GCM.var <- append(GCM.var,'DD5')}
+  }
+  if('NFFD' %in% var){
+    if('M' %in% tFrame){for(a in mnts){GCM.var <- append(GCM.var,paste0('NFFD',a))}}
+    if('S' %in% tFrame){for(b in seas){GCM.var <- append(GCM.var,paste0('NFFD_',b))}}
+    if('Y' %in% tFrame){GCM.var <- append(GCM.var,'NFFD')}
+  }
+  if('PAS' %in% var){
+    if('M' %in% tFrame){for(a in mnts){GCM.var <- append(GCM.var,paste0('PAS',a))}}
+    if('S' %in% tFrame){for(b in seas){GCM.var <- append(GCM.var,paste0('PAS_',b))}}
+    if('Y' %in% tFrame){GCM.var <- append(GCM.var,'PAS')}
+  }
+  if('CMI' %in% var){
+    if('M' %in% tFrame){for(a in mnts){GCM.var <- append(GCM.var,paste0('CMI',a))}}
+    if('S' %in% tFrame){for(b in seas){GCM.var <- append(GCM.var,paste0('CMI_',b))}}
+    if('Y' %in% tFrame){GCM.var <- append(GCM.var,'CMI')}
+  }
   if('Rad' %in% var){
-    for(a in mnts){GCM.var <- append(GCM.var,paste0('Rad_',a))}
-    for(b in seas){GCM.var <- append(GCM.var,paste0(b,'Rad'))}
+    if('M' %in% tFrame){for(a in mnts){GCM.var <- append(GCM.var,paste0('Rad',a))}}
+    if('S' %in% tFrame){for(b in seas){GCM.var <- append(GCM.var,paste0('Rad_',b))}}
+    if('Y' %in% tFrame){GCM.var <- append(GCM.var,'Rad')}
   }
   if('DD_0' %in% var){
-    for(a in mnts){GCM.var <- append(GCM.var,paste0('DD_0_',a))}
-    for(b in seas){GCM.var <- append(GCM.var,paste0(b,'DD_0'))}
+    if('M' %in% tFrame){for(a in mnts){GCM.var <- append(GCM.var,paste0('DD_0_',a))}}
+    if('S' %in% tFrame){for(b in seas){GCM.var <- append(GCM.var,paste0('DD_0_',b))}}
+    if('Y' %in% tFrame){GCM.var <- append(GCM.var,'DD_0')}
   }
   if('DD_18' %in% var){
-    for(a in mnts){GCM.var <- append(GCM.var,paste0('DD_18_',a))}
-    for(b in seas){GCM.var <- append(GCM.var,paste0(b,'DD_18'))}
+    if('M' %in% tFrame){for(a in mnts){GCM.var <- append(GCM.var,paste0('DD_18_',a))}}
+    if('S' %in% tFrame){for(b in seas){GCM.var <- append(GCM.var,paste0('DD_18_',b))}}
+    if('Y' %in% tFrame){GCM.var <- append(GCM.var,'DD_18')}
   }
   if('DD18' %in% var){
-    for(a in mnts){GCM.var <- append(GCM.var,paste0('DD18_',a))}
-    for(b in seas){GCM.var <- append(GCM.var,paste0(b,'DD18'))}
+    if('M' %in% tFrame){for(a in mnts){GCM.var <- append(GCM.var,paste0('DD18_',a))}}
+    if('S' %in% tFrame){for(b in seas){GCM.var <- append(GCM.var,paste0('DD18_',b))}}
+    if('Y' %in% tFrame){GCM.var <- append(GCM.var,'DD18')}
   }
   if('Eref' %in% var){
-    for(a in mnts){GCM.var <- append(GCM.var,paste0('Eref_',a))}
-    for(b in seas){GCM.var <- append(GCM.var,paste0(b,'Eref'))}
+    if('M' %in% tFrame){for(a in mnts){GCM.var <- append(GCM.var,paste0('Eref',a))}}
+    if('S' %in% tFrame){for(b in seas){GCM.var <- append(GCM.var,paste0('Eref_',b))}}
+    if('Y' %in% tFrame){GCM.var <- append(GCM.var,'Eref')}
   }
   if('CMD' %in% var){
-    for(a in mnts){GCM.var <- append(GCM.var,paste0('CMD_',a))}
-    for(b in seas){GCM.var <- append(GCM.var,paste0(b,'CMD'))}
+    if('M' %in% tFrame){for(a in mnts){GCM.var <- append(GCM.var,paste0('CMD',a))}}
+    if('S' %in% tFrame){for(b in seas){GCM.var <- append(GCM.var,paste0('CMD_',b))}}
+    if('Y' %in% tFrame){GCM.var <- append(GCM.var,'CMD')}
   }
   if('RH' %in% var){
-    for(a in mnts){GCM.var <- append(GCM.var,paste0('RH_',a))}
-    for(b in seas){GCM.var <- append(GCM.var,paste0(b,'RH'))}
+    if('M' %in% tFrame){for(a in mnts){GCM.var <- append(GCM.var,paste0('RH',a))}}
+    if('S' %in% tFrame){for(b in seas){GCM.var <- append(GCM.var,paste0('RH_',b))}}
+    if('Y' %in% tFrame){GCM.var <- append(GCM.var,'RH')}
   }
 
 

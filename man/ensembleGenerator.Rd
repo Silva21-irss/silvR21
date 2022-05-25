@@ -7,6 +7,7 @@
 ensembleGenerator(
   files,
   outdir = getwd(),
+  tFrame = c("M", "S", "Y"),
   var = c("Tmax", "Tmin", "PPT", "DD5", "NFFD", "PAS", "CMI"),
   ssp = c("S1", "S2", "S3"),
   years = c("Y2", "Y3", "Y4", "Y5"),
@@ -17,6 +18,8 @@ ensembleGenerator(
 \item{files}{The list of files provided by the projClimateNA20Y output, after using the AnnualSeasonalMeans function to process annual and seasonal averages/sums.}
 
 \item{outdir}{The output directory to store the ensembles. This does not need to be the current working directory.}
+
+\item{tFrame}{The variable time frames included in the climate data. If the AnnualSeasonalMeans tool has been used, then the default value is desired. Otherwise, 'M' represents monthly, 'S' represents seasonal, and 'Y' represents annual time frames.}
 
 \item{var}{The desired variables to produce averages of. Variables include : 'Tmax','Tmin','Tavg','PPT','Rad','DD_0','DD5','DD18','DD_18','NFFD','CMI','PAS','Eref','CMD','RH'. Default value includes 'Tmin','Tmax','PPT','DD5_','NFFD','CMI','PAS'.}
 
@@ -30,7 +33,7 @@ ensembleGenerator(
 Directory with ensemble files as CSVs
 }
 \description{
-This function uses the desired SSPs and variables to generate averaged ensembles. Its outputs will consist of a series of ensemble CSV files, each consisting of the average value for each variable under every SSP scenario and time frames.
+This function uses the desired SSPs and variables to generate averaged ensembles. Its outputs will consist of a series of ensemble CSV files, each consisting of the average value for each variable under every SSP scenario and time frames. This function is only used with monthly data outputs.
 }
 \examples{
 #files <- list.files(pattern='*.csv$') # Access all CSV files

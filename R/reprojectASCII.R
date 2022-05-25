@@ -3,7 +3,7 @@
 #' Reads and reprojects an ASCII raster file following the data acquisition with ClimateNA (or any alternative source).
 #'
 #' @param file ASCII file that requires reprojection
-#' @param direc The working directory. This needs to be the same directory as the file location so the basename can be drawn and the reprojected ASCII file can be written.
+#' @param direc The output directory.
 #' @param NAflag NA value within the raster to mask when reprojecting.
 #' @param projection The output projection in which the ASCII input requires to be reprojected to. The default value is "EPSG:4326"
 #'

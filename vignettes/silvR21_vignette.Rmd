@@ -13,9 +13,182 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
-This is currently a work in progress. Please come back for silvR21 version 1.2.0
+The silvR21 package is designed around the functions used to prepare, access, and process climate data within the Silva 21 Project. It uses the ClimateNA application, which "downscales PRISM 1971-2000 gridded monthly climate normal data (800 x 800 m) to scale-free point locations." To further understand the variables and the application, please visit https://climatena.ca/.
+
+After installing the package, you may import the library.
 ```{r setup}
 library(silvR21)
 
 
 ```
+Climate data is accessible from Digital Elevation Models (DEM). The two formats acceptable to the ClimateNA application are comma separated values (CSV) and the American Standard Code for Information Interchange (ASCII). While the majority of this package is designed around the CSV format, ASCII raster files are also used. 
+
+The table format for a CSV file must be specifically order and prepared to be accepted by the application. As a result, the `demToCSV` tool is first used to convert the DEM into a properly prepared CSV file, specifically formatted to be an input for any of the climate data acquisition functions.
+```{r line 1, eval=FALSE}
+# Locate the current working directory
+getwd() 
+#> [1] "E:/DEM/silvR21/vignettes"
+
+# Select the DEM file used as input for climate data
+file <- "site_DEM.tif" 
+
+# No alternative output directory is specified, so the CSV file will be ouputted to the same location
+demToCSV(file) 
+
+# Open the output CSV file
+dem <- read.csv("site_DEM.csv")
+head(dem)
+#>   ID1 ID2      lat     long       el
+#> 1 121 121 49.36102 122.5641 311.8277
+#> 2 122 122 49.36102 122.5607 443.1358
+#> 3 123 123 49.36102 122.5573 626.1150
+#> 4 124 124 49.36102 122.5538 727.7190
+#> 5 125 125 49.36102 122.5504 669.8089
+#> 6 126 126 49.36102 122.5469 506.9015
+```
+The resulting file is precisely formatted in the desired fashion for the ClimateNA application to receive it as input. The latitude and longitude are recorded as digital degrees in the Northern and Western hemispheres. It is not necessary to read the output file in your R environment; however, if projected climate data is desired, the CSV file must be relocated to the ClimateNA application's directory.
+
+## Climate Data Acquisition
+# Historical Data Acquisition
+Three functions can be used to access historical data. They include `histAnnualClimateNA`, `hist10YClimateNA`, and `hist30YClimateNA`. Unlike future climate projections, historical data can be acquired from an input at any directory location on your computer. Only the working directory must be changed to the location of the application. All three functions have identical parameters with only `dateR` having different configuration. 
+
+Using the DEM .csv file as input, a date range must be specified (`dateR`) as either a singular year (`'1980'`), a decade (`'1991_2000'`), or a 30 years period (`'1961_1990'`), depending on the historical data acquisition tool in use. For any date range, the first number must end with '1' (such as 1971) and the last number must end with '0' (such as 2000). 
+
+Three options are available for the variables' time frame (`tFrame`). These include annual (Y), seasonal (S), and monthly (M).
+
+The working directory must be changed to the same location as the ClimateNA application. Using the .exe file, an option is granted to relocate the output to any desired directory; however, if this parameter is not adjusted, the output will be located in the same directory as its input.
+
+```{r line 2, eval=FALSE}
+# Change working directory to the application's location
+setwd('E:/ClimateNA_v30')
+
+# Access monthly climate data for 1972
+histAnnualClimateNA('site_DEM.csv', '1972', 'M', 'E:/ClimateNA_v30/ClimateNA_v7.30.exe')
+
+# Access seasonal climate data for the 1980s
+hist10YClimateNA('site_DEM.csv','1981_1990','S','E:/ClimateNA_v30/ClimateNA_v7.30.exe')
+
+# Access annual climate data for 1951 to 1980 and relocate the output
+hist30YClimateNA('site_DEM.csv','1951_1980','Y','E:/ClimateNA_v30/ClimateNA_v7.30.exe')
+
+# Access climate data with an ASCII file
+hist30YClimateNA('site_DEM.asc','1951_1980','Y','E:/ClimateNA_v30/ClimateNA_v7.30.exe')
+
+# Reproject ASCII output files
+setwd(paste0(getwd(),'/site_DEM_1951_1980.csv/Normal_1951_1980'))
+asciiFiles <- list.files()
+for(file in asciiFiles){
+  reprojectASCII(file)
+}
+```
+When accessing climate data using an ASCII file rather than CSV, the output ASCII files will not be projected to any coordinate system, so a reprojection must be performed to visualize the data. If the desired output projection is EPSG 4326 and the NA values are -9999, no other parameter requires adjustment.
+
+For more information concerning the output variables, please consult the ClimateNA website.
+
+# Future Climate Projection Data Acquisition
+For acquisition of future climate projections, the input files must be located within the same directory as the ClimateNA application. Only one type of date range is available to access using R. 30 years normals along with annual projections are also available, but only when opening the application, not currently with R. Much like it is done with the historical data acquisition functions, the selection of climactic variable time frames (`tFrame`) and locating the .exe file is done in a similar manner.  
+
+The `projClimateNA20Y` tool has additional parameters where the General Circulation Models (GCM) of the Coupled Model Intercomparison Project (CMIP6) can be selected, along with four different Shared Socioeconomic Pathway (SSP) scenarios over five 20-years time frames. If left alone, these parameters are set to include the options used in the climate reports for Silva21. To further visualize and compare the projections and scenarios, please visit https://bcgov-env.shinyapps.io/cmip6-BC/.
+
+`scen` is representative of the selectable GCM projections
+
+`ssp` is the SSP scenario parameter
+
+`years` is the time frame parameter
+
+```{r line 3, eval=FALSE}
+# Change working directory to the application's location
+setwd('E:/ClimateNA_v30')
+
+# Use the same GCMs, SSPs, and time frames as used within the climate reports for Silva21
+projClimateNA20Y('site_DEM.csv','M','E:/ClimateNA_v30/ClimateNA_v7.30.exe')
+
+# Access only the 8GCM ensemble for the two "worst-case" SSP scenarios in the last 40 years of the 21st Century
+projClimateNA20Y('site_DEM.csv','M','E:/ClimateNA_v30/ClimateNA_v7.30.exe', scen = '8GCM', ssp = c('S3','S5'), years = c('Y4','Y5'))
+```
+The outputs from this function will be located within the folder in the application's directory named after the input CSV file. Each output file is appropriately named after the GCM, SSP, and time frame it represents. The use of `gcmSepCols` divides the elements of the file name into three manageable columns
+```{r line 4, eval=FALSE}
+projFile <- "ACCESS-ESM1-5_ssp370_2061-2080.csv"
+gcmSepCols(projFile)
+#>                                files Time_Frame    SSP Climate_Model
+#> 1 ACCESS-ESM1-5_ssp370_2061-2080.csv  2061-2080 ssp370 ACCESS-ESM1-5
+```
+
+## Climate Data Processing Tools
+# Calculating Annual and Seasonal Summaries from Monthly Data
+Generally, monthly data is acquired and reprocessed to access seasonal and annual data. To simplify the processing methods, the `AnnualSeasonalMeans` function is available. It produces mean seasonal and annual values from monthly temperature, solar radiation, and relative humidity data values and sums for all other variables. It is then re-outputted into the same CSV files.
+```{r line 5, eval=FALSE}
+projFile <- "ACCESS-ESM1-5_ssp370_2061-2080.csv"
+data <- read.csv(projFile)
+
+# Compute annual and seasonal mean and sum values for every variable
+AnnualSeasonalMeans(data, var = c('Tmax','Tmin','Tave','PPT','Rad','DD_5','DD5','DD_18','DD18','NFFD','PAS','Eref','CMD','RH','CMI'))
+#   ID1 ID2 Latitude Longitude Elevation Tmax01 Tmax02 Tmax03 Tmax04 Tmax05 Tmax06 Tmax07 Tmax08 Tmax09 Tmax10 Tmax11 Tmax12 Tmin01 Tmin02 Tmin03
+# 1   1   1 45.36492 -114.0465  1696.183    3.9      7   11.7   18.1     25   32.9   41.5   38.6   29.7   21.1   10.9    4.2   -1.7   -0.4      2
+# 2   2   2 45.36492 -114.0464  1698.001    3.9      7   11.7   18.1     25   32.9   41.4   38.6   29.7   21.1   10.9    4.2   -1.7   -0.4      2
+# 3   3   3 45.36492 -114.0464  1700.459    3.9      7   11.7   18.1     25   32.9   41.4   38.6   29.7   21.1   10.8    4.2   -1.7   -0.4      2
+#   Tmin04 Tmin05 Tmin06 Tmin07 Tmin08 Tmin09 Tmin10 Tmin11 Tmin12 Tave01 Tave02 Tave03 Tave04 Tave05 Tave06 Tave07 Tave08 Tave09 Tave10 Tave11
+# 1    5.6    9.6   15.3   21.6   20.8   15.4    8.7    4.1   -0.7    1.1    3.3    6.9   11.8   17.3   24.1   31.5   29.7   22.6   14.9    7.5
+# 2    5.6    9.6   15.3   21.6   20.8   15.4    8.7    4.1   -0.7    1.1    3.3    6.8   11.8   17.3   24.1   31.5   29.7   22.6   14.9    7.5
+# 3    5.6    9.6   15.3   21.6   20.8   15.4    8.7    4.1   -0.7    1.1    3.3    6.8   11.8   17.3   24.1   31.5   29.7   22.6   14.9    7.5
+#   Tave12 PPT01 PPT02 PPT03 PPT04 PPT05 PPT06 PPT07 PPT08 PPT09 PPT10 PPT11 PPT12 Rad01 Rad02 Rad03 Rad04 Rad05 Rad06 Rad07 Rad08 Rad09 Rad10 Rad11
+# 1    1.8    56    33    42    54    69    42    24    36    47    49    58    53   3.7   7.3  11.9  15.1  22.3  27.1  26.3    21  15.1   9.4   4.3
+# 2    1.8    57    33    42    54    69    42    24    36    47    50    58    53   3.7   7.3  11.9  15.1  22.3  27.1  26.3    21  15.1   9.4   4.3
+# 3    1.8    57    33    42    54    69    42    24    36    47    50    58    53   3.7   7.3  11.9  15.1  22.3  27.1  26.3    21  15.1   9.4   4.3
+#   Rad12 DD_0_01 DD_0_02 DD_0_03 DD_0_04 DD_0_05 DD_0_06 DD_0_07 DD_0_08 DD_0_09 DD_0_10 DD_0_11 DD_0_12 DD5_01 DD5_02 DD5_03 DD5_04 DD5_05 DD5_06
+# 1     3      53      27      10       1       0       0       0       0       0       0       6      42     19     33     93    210    382    572
+# 2     3      53      27      10       1       0       0       0       0       0       0       6      42     19     33     93    210    381    572
+# 3     3      53      27      10       1       0       0       0       0       0       0       6      42     19     33     93    209    381    572
+#   DD5_07 DD5_08 DD5_09 DD5_10 DD5_11 DD5_12 DD_18_01 DD_18_02 DD_18_03 DD_18_04 DD_18_05 DD_18_06 DD_18_07 DD_18_08 DD_18_09 DD_18_10 DD_18_11
+# 1    819    762    526    308    104     22      526      407      348      194       61        4        0        0       12      115      316
+# 2    819    762    526    308    104     22      526      407      348      195       61        4        0        0       12      115      317
+# 3    819    762    526    308    104     22      526      407      348      195       61        4        0        0       12      115      317
+#   DD_18_12 DD18_01 DD18_02 DD18_03 DD18_04 DD18_05 DD18_06 DD18_07 DD18_08 DD18_09 DD18_10 DD18_11 DD18_12 NFFD01 NFFD02 NFFD03 NFFD04 NFFD05
+# 1      501       0       0       0       7      42     186     418     361     147      18       0       0     11     12     21     28     31
+# 2      501       0       0       0       7      42     186     418     361     147      18       0       0     11     12     21     28     31
+# 3      501       0       0       0       7      42     186     418     361     147      18       0       0     11     12     21     28     31
+#   NFFD06 NFFD07 NFFD08 NFFD09 NFFD10 NFFD11 NFFD12 PAS01 PAS02 PAS03 PAS04 PAS05 PAS06 PAS07 PAS08 PAS09 PAS10 PAS11 PAS12 Eref01 Eref02 Eref03
+# 1     30     31     31     30     30     25     13     9     3     1     0     0     0     0     0     0     0     2     6     14     23     49
+# 2     30     31     31     30     30     25     13     9     3     1     0     0     0     0     0     0     0     2     6     14     23     49
+# 3     30     31     31     30     30     25     13     9     3     1     0     0     0     0     0     0     0     2     7     14     23     49
+#   Eref04 Eref05 Eref06 Eref07 Eref08 Eref09 Eref10 Eref11 Eref12 CMD01 CMD02 CMD03 CMD04 CMD05 CMD06 CMD07 CMD08 CMD09 CMD10 CMD11 CMD12 RH01 RH02
+# 1     87    140    184    230    183    105     58     21     12     0     0     7    33    71   143   206   147    58     8     0     0   79   74
+# 2     87    140    184    230    183    105     58     21     12     0     0     7    33    71   143   206   147    58     8     0     0   79   74
+# 3     87    140    184    230    183    105     58     21     12     0     0     7    33    71   142   206   147    58     8     0     0   79   74
+#   RH03 RH04 RH05 RH06 RH07 RH08 RH09 RH10 RH11 RH12 CMI01 CMI02 CMI03 CMI04 CMI05  CMI06  CMI07  CMI08  CMI09 CMI10 CMI11 CMI12     Tmax  Tmax_wt
+# 1   68   61   55   51   49   53   59   62   77   82  4.62  1.41  0.23 -2.74 -6.20 -16.96 -31.71 -24.75 -11.67 -4.73  2.34  4.17 20.38333 7.533333
+# 2   68   61   55   51   49   53   59   62   77   82  4.62  1.42  0.23 -2.73 -6.19 -16.95 -31.70 -24.74 -11.66 -4.72  2.35  4.18 20.37500 7.533333
+# 3   68   61   55   52   49   53   59   62   77   82  4.63  1.42  0.24 -2.71 -6.17 -16.94 -31.68 -24.72 -11.65 -4.71  2.36  4.18 20.36667 7.533333
+#    Tmax_sm  Tmax_sp  Tmax_at     Tmin     Tmin_wt  Tmin_sm  Tmin_sp  Tmin_at     Tave  Tave_wt  Tave_sm  Tave_sp  Tave_at PPT PPT_wt PPT_sm PPT_sp
+# 1 36.60000 25.33333 12.06667 8.358333 -0.03333333 19.26667 10.16667 4.033333 14.37500 3.766667 27.93333 17.73333 8.066667 563    131    107    165
+# 2 36.56667 25.33333 12.06667 8.358333 -0.03333333 19.26667 10.16667 4.033333 14.36667 3.733333 27.93333 17.73333 8.066667 565    132    107    165
+# 3 36.56667 25.33333 12.03333 8.358333 -0.03333333 19.26667 10.16667 4.033333 14.36667 3.733333 27.93333 17.73333 8.066667 565    132    107    165
+#   PPT_at  DD5 DD5_wt DD5_sm DD5_sp DD5_at NFFD NFFD_wt NFFD_sm NFFD_sp NFFD_at PAS PAS_wt PAS_sm PAS_sp PAS_at    CMI CMI_wt CMI_sm CMI_sp CMI_at
+# 1    160 3850    145   2107   1164    434  293      44      92      89      68  21     13      0      0      8 -85.99   6.26 -68.13 -25.90   1.78
+# 2    161 3849    145   2107   1163    434  293      44      92      89      68  21     13      0      0      8 -85.89   6.27 -68.10 -25.87   1.81
+# 3    161 3848    145   2107   1162    434  293      44      92      89      68  22     13      0      0      9 -85.75   6.29 -68.05 -25.82   1.83
+#     Rad Rad_wt Rad_sm Rad_sp Rad_at DD_18 DD_18_wt DD_18_sm DD_18_sp DD_18_at DD18 DD18_wt DD18_sm DD18_sp DD18_at Eref Eref_wt Eref_sm Eref_sp
+# 1 166.5   22.9   62.4   64.5   16.7  2484     1281       12      259      932 1179       0     926     235      18 1106      86     518     411
+# 2 166.5   22.9   62.4   64.5   16.7  2486     1281       12      260      933 1179       0     926     235      18 1106      86     518     411
+# 3 166.5   22.9   62.4   64.5   16.7  2486     1281       12      260      933 1179       0     926     235      18 1106      86     518     411
+#   Eref_at CMD CMD_wt CMD_sm CMD_sp CMD_at       RH    RH_wt    RH_sm    RH_sp    RH_at
+# 1      91 673      7    411    247      8 64.16667 73.66667 53.66667 55.66667 73.66667
+# 2      91 673      7    411    247      8 64.16667 73.66667 53.66667 55.66667 73.66667
+# 3      91 672      7    411    246      8 64.25000 73.66667 53.66667 56.00000 73.66667
+#  [ reached 'max' / getOption("max.print") -- omitted 4564 rows ]
+```
+# Ensemble Generator
+
+Using the processed files with annual and seasonal means/sums applied, projected climate data can then be entered into the `ensembleGenerator` to produce a set of ensembles representative of the chosen GCMs and SSP scenarios. The SSP and time frame selection must be carefully adjusted to represent the real data, otherwise it is prone to fail with an error.
+```{r line 6, eval=FALSE}
+setwd(paste0(getwd(),'/site_DEM'))
+files <- list.files(pattern='*csv')
+ensembleGenerator(files,tFrame=c('M','S','Y'),years = c('Y4','Y5'), concatenate = TRUE)
+```
+The results will be included in a new GCMensemble directory. With concatenation, two additional files are outputted including a megafile which includes all of the data in one CSV file and an Area-Mean summary file.
+
+
+
+
+
+

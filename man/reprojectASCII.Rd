@@ -9,7 +9,7 @@ reprojectASCII(file, direc = getwd(), NAflag = -9999, projection = "EPSG:4326")
 \arguments{
 \item{file}{ASCII file that requires reprojection}
 
-\item{direc}{The working directory. This needs to be the same directory as the file location so the basename can be drawn and the reprojected ASCII file can be written.}
+\item{direc}{The output directory.}
 
 \item{NAflag}{NA value within the raster to mask when reprojecting.}
 

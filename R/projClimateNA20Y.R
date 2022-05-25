@@ -31,6 +31,7 @@ projClimateNA20Y <- function(file,tFrame,exe,scen = c('ACC','CNRM','EC','GFDL','
 
   sce <- list()
   #if(is.null(scen)){scen <- c('13GCM','ACC','BCC','CAN','CNRM','EC','GFDL','GISS','INM','IPSL','MIR','MPI','MRI','UK')}
+  if('8GCM' %in% scen){sce <- append(sce, '8GCMs_ensemble')}
   if('13GCM' %in% scen){sce <- append(sce, '13GCMs_ensemble')}
   if('ACC' %in% scen){sce <- append(sce, 'ACCESS-ESM1-5')}
   if('BCC' %in% scen){sce <- append(sce,"BCC-CSM2-MR")}
