@@ -25,4 +25,4 @@ After using the ASCII DEM file format as input within the ClimateNA desktop appl
 
 ## Install **silvR21** Package
 * First, you will need to install the `devtools` package.
-* Install the **silvR21** package through GitHub with `devtools::install_github("Silva21-irss/silvR21")`
+* Install the **silvR21** package through GitHub with `devtools::install_github("Silva21-irss/silvR21",build_vignettes = TRUE)`
