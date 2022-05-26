@@ -49,7 +49,7 @@ head(dem)
 The resulting file is precisely formatted in the desired fashion for the ClimateNA application to receive it as input. The latitude and longitude are recorded as digital degrees in the Northern and Western hemispheres. It is not necessary to read the output file in your R environment; however, if projected climate data is desired, the CSV file must be relocated to the ClimateNA application's directory.
 
 ## Climate Data Acquisition
-# Historical Data Acquisition
+### Historical Data Acquisition
 Three functions can be used to access historical data. They include `histAnnualClimateNA`, `hist10YClimateNA`, and `hist30YClimateNA`. Unlike future climate projections, historical data can be acquired from an input at any directory location on your computer. Only the working directory must be changed to the location of the application. All three functions have identical parameters with only `dateR` having different configuration. 
 
 Using the DEM .csv file as input, a date range must be specified (`dateR`) as either a singular year (`'1980'`), a decade (`'1991_2000'`), or a 30 years period (`'1961_1990'`), depending on the historical data acquisition tool in use. For any date range, the first number must end with '1' (such as 1971) and the last number must end with '0' (such as 2000). 
@@ -85,7 +85,7 @@ When accessing climate data using an ASCII file rather than CSV, the output ASCI
 
 For more information concerning the output variables, please consult the ClimateNA website.
 
-# Future Climate Projection Data Acquisition
+### Future Climate Projection Data Acquisition
 For acquisition of future climate projections, the input files must be located within the same directory as the ClimateNA application. Only one type of date range is available to access using R. 30 years normals along with annual projections are also available, but only when opening the application, not currently with R. Much like it is done with the historical data acquisition functions, the selection of climactic variable time frames (`tFrame`) and locating the .exe file is done in a similar manner.  
 
 The `projClimateNA20Y` tool has additional parameters where the General Circulation Models (GCM) of the Coupled Model Intercomparison Project (CMIP6) can be selected, along with four different Shared Socioeconomic Pathway (SSP) scenarios over five 20-years time frames. If left alone, these parameters are set to include the options used in the climate reports for Silva21. To further visualize and compare the projections and scenarios, please visit https://bcgov-env.shinyapps.io/cmip6-BC/.
@@ -115,7 +115,7 @@ gcmSepCols(projFile)
 ```
 
 ## Climate Data Processing Tools
-# Calculating Annual and Seasonal Summaries from Monthly Data
+### Calculating Annual and Seasonal Summaries from Monthly Data
 Generally, monthly data is acquired and reprocessed to access seasonal and annual data. To simplify the processing methods, the `AnnualSeasonalMeans` function is available. It produces mean seasonal and annual values from monthly temperature, solar radiation, and relative humidity data values and sums for all other variables. It is then re-outputted into the same CSV files.
 ```{r line 5, eval=FALSE}
 projFile <- "ACCESS-ESM1-5_ssp370_2061-2080.csv"
@@ -177,7 +177,7 @@ AnnualSeasonalMeans(data, var = c('Tmax','Tmin','Tave','PPT','Rad','DD_5','DD5',
 # 3      91 672      7    411    246      8 64.25000 73.66667 53.66667 56.00000 73.66667
 #  [ reached 'max' / getOption("max.print") -- omitted 4564 rows ]
 ```
-# Ensemble Generator
+### Ensemble Generator
 
 Using the processed files with annual and seasonal means/sums applied, projected climate data can then be entered into the `ensembleGenerator` to produce a set of ensembles representative of the chosen GCMs and SSP scenarios. The SSP and time frame selection must be carefully adjusted to represent the real data, otherwise it is prone to fail with an error.
 ```{r line 6, eval=FALSE}
