@@ -11,7 +11,7 @@ As an alternative to using the desktop application, `hist30YClimateNA`, `hist10Y
 #### Future Climate Projections Access
 The `projClimateNA20Y` tool enhances the access abilities with ClimateNA as it is easier to select GCM models, SSP scenarios, and date ranges by adjusting a few parameters. The DEM file used to access projected data must be located within the same directory as the ClimateNA application.
 #### Converting DEM file to CSV ready for use
-The guidelines for preparing a DEM file so that it can be correctly formatted for use with ClimateNA can be difficult to make properly. Errors are common and it is not always obvious how to correct them. The `demToCSV` tool is specifically designed to prepare any DEM TIFF file in the correct CSV format so that it can be inputted into either `historicalClimateNA` or `projClimateNA20Y`.
+The guidelines for preparing a DEM file so that it can be correctly formatted for use with ClimateNA can be difficult to make properly. Errors are common and it is not always obvious how to correct them. The `demToCSV` tool is specifically designed to prepare any DEM TIFF file in the correct CSV format so that it can be inputted into either `hist__ClimateNA` or `projClimateNA20Y`.
 #### Generating GCM Ensembles
 As an alternative to using the 13GCM ensembles that are available with ClimateNA, the `ensembleGenerator` tool prepares an ensemble from any list of GCMs provided that all data has been accessed.
 #### Converting Monthly Data into Annual and Seasonal Means and Sums
