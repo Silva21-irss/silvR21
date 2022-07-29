@@ -18,6 +18,7 @@
 #' @importFrom utils read.csv
 #' @importFrom dplyr %>%
 #' @importFrom utils write.csv
+#' @importFrom data.table fread fwrite
 #'
 #' @examples
 #' #files <- list.files(pattern='*.csv$') # Access all CSV files
@@ -148,7 +149,7 @@ ensembleGenerator <- function(files,outdir = getwd(),tFrame = c('M','S','Y'),var
         ssp.list <- rbind(ssp.list,x) # Get all GCMs with the same scenario
       }
     }
-    myfiles <- lapply(ssp.list,read.csv) # Select the relevant GCMs
+    myfiles <- lapply(ssp.list,data.table::fread) # Select the relevant GCMs
     list.length <- length(myfiles)
     #print(ssp.list)
     for(a in 1:list.length){
@@ -167,7 +168,7 @@ ensembleGenerator <- function(files,outdir = getwd(),tFrame = c('M','S','Y'),var
         GCM$Value[y] <- unlist(px) %>% mean() # Add mean pixel values into ensemble
       }
       dir.create(paste0(getwd(),'/GCMensemble'),showWarnings = FALSE)
-      write.csv(GCM,paste0(outdir,'/GCMensemble/',as.character(list.length),'GCMensemble_',names(myfiles[[1]])[x],'_',i))
+      data.table::fwrite(GCM,paste0(outdir,'/GCMensemble/',as.character(list.length),'GCMensemble_',names(myfiles[[1]])[x],'_',i))
       gc()
       rm(GCM)
     }
@@ -176,15 +177,15 @@ ensembleGenerator <- function(files,outdir = getwd(),tFrame = c('M','S','Y'),var
     setwd(paste0(getwd(),'/GCMensemble'))
     files <- list.files(pattern='*csv$')
 
-    data <- read.csv(files[1])
+    data <- data.table::fread(files[1])
     names(data)[5] <- gsub('.csv','',files[1])
     for(i in 2:length(files)){
-      item <- read.csv(files[i])
+      item <- data.table::fread(files[i])
       data[i+4] <- item[5]
       names(data)[i+4] <- gsub('.csv','',files[i])
     }
     setwd('..') # Go back one folder
-    write.csv(data,paste0(as.character(list.length),'GCMensemble_Megafile.csv'))
+    data.table::fwrite(data,paste0(as.character(list.length),'GCMensemble_Megafile.csv'))
 
     # Create area mean file
     areaMean <- data.frame(names(data))
@@ -218,6 +219,6 @@ ensembleGenerator <- function(files,outdir = getwd(),tFrame = c('M','S','Y'),var
       }
     }
 
-    write.csv(data_tbl,paste0(as.character(list.length),'GCMensemble_areaMean.csv'))
+    data.table::fwrite(data_tbl,paste0(as.character(list.length),'GCMensemble_areaMean.csv'))
   }
 }

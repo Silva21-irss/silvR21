@@ -8,6 +8,7 @@
 #' @return A CSV file representing the inputted DEM
 #' @export
 #' @importFrom utils write.csv
+#' @importFrom data.table fwrite
 #'
 #' @author Michael Burnett - UBC Faculty of Forestry
 #'
@@ -39,5 +40,5 @@ demToCSV <- function(file,outdir = dirname(file)){
   # csv <- csv[c(4,5,2,3,1)]
   csv <- r_df[c(4,5,2,1,3)]
   names(csv) <- c('ID1','ID2','lat','long','el')
-  write.csv(csv,paste0(outdir,'/',substr(fileN,1,nchar(fileN)-4),'.csv'),row.names=FALSE)
+  fwrite(csv,paste0(outdir,'/',substr(fileN,1,nchar(fileN)-4),'.csv'),row.names=FALSE)
 }
