@@ -6,13 +6,19 @@
 \usage{
 AnnualSeasonalMeans(
   item,
-  var = c("Tmax", "Tmin", "PPT", "DD5", "NFFD", "PAS", "CMI")
+  var = c("Tmax", "Tmin", "PPT", "DD5", "NFFD", "PAS", "CMI"),
+  TmaxMax = FALSE,
+  TminMin = FALSE
 )
 }
 \arguments{
 \item{item}{CSV file containing monthly (NOT primary monthly) ClimateNA variables. You can use primary monthly variables, but you must emphasize which variables to use.}
 
 \item{var}{Climate variables desired for mean/sum calculations based on annual and seasonal distributions (seasons based on months, not true seasons).  Options include : Tmax, Tmin, Tave, PPT, Rad, DD_5, DD5, DD_18, DD18, NFFD, PAS, Eref, CMD, RH, CMI.  Mean values are calculated for temperature, solar radiation, and relative humidity.  Summed values are calculated for all other variables. Default value indicates only Tmax, Tmin, PPT, DD5, NFFD, PAS, and CMI.}
+
+\item{TmaxMax}{logical. Use to access maximum values for Tmax variable. Default setting is FALSE (use of the mean value)}
+
+\item{TminMin}{logical. Use to access minimum values for Tmin variable. Default setting is FALSE (use of the mean value)}
 }
 \value{
 An expanded data frame

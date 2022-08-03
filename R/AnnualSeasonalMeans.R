@@ -4,6 +4,8 @@
 #'
 #' @param item CSV file containing monthly (NOT primary monthly) ClimateNA variables. You can use primary monthly variables, but you must emphasize which variables to use.
 #' @param var Climate variables desired for mean/sum calculations based on annual and seasonal distributions (seasons based on months, not true seasons).  Options include : Tmax, Tmin, Tave, PPT, Rad, DD_5, DD5, DD_18, DD18, NFFD, PAS, Eref, CMD, RH, CMI.  Mean values are calculated for temperature, solar radiation, and relative humidity.  Summed values are calculated for all other variables. Default value indicates only Tmax, Tmin, PPT, DD5, NFFD, PAS, and CMI.
+#' @param TmaxMax logical. Use to access maximum values for Tmax variable. Default setting is FALSE (use of the mean value)
+#' @param TminMin logical. Use to access minimum values for Tmin variable. Default setting is FALSE (use of the mean value)
 #'
 #' @return An expanded data frame
 #' @export
@@ -23,21 +25,55 @@
 #'   item <- AnnualSeasonalMeans(item)
 #'   write.csv(item,i)
 #' }
-AnnualSeasonalMeans <- function(item, var = c('Tmax','Tmin','PPT','DD5','NFFD','PAS','CMI')){
+AnnualSeasonalMeans <- function(item, var = c('Tmax','Tmin','PPT','DD5','NFFD','PAS','CMI'),TmaxMax = FALSE, TminMin = FALSE){
   #if(is.null(var)){var <- c('Tmax','Tmin','PPT','DD5_','NFFD','PAS','CMI')}
   if('Tmax' %in% var){
-    item$Tmax <- rowMeans(item[c(which(names(item)=='Tmax01'):which(names(item)=='Tmax12'))])
-    item$Tmax_wt <- rowMeans(item[c(which(names(item)=='Tmax01'):which(names(item)=='Tmax03'))])
-    item$Tmax_sm <- rowMeans(item[c(which(names(item)=='Tmax07'):which(names(item)=='Tmax09'))])
-    item$Tmax_sp <- rowMeans(item[c(which(names(item)=='Tmax04'):which(names(item)=='Tmax06'))])
-    item$Tmax_at <- rowMeans(item[c(which(names(item)=='Tmax10'):which(names(item)=='Tmax12'))])
+    if(isTRUE(TmaxMax)){
+      item_Tmax1 <- which(names(item)=='Tmax01')
+      item_Tmax3 <- which(names(item)=='Tmax03')
+      item_Tmax4 <- which(names(item)=='Tmax04')
+      item_Tmax6 <- which(names(item)=='Tmax06')
+      item_Tmax7 <- which(names(item)=='Tmax07')
+      item_Tmax9 <- which(names(item)=='Tmax09')
+      item_Tmax10 <- which(names(item)=='Tmax10')
+      item_Tmax12 <- which(names(item)=='Tmax12')
+      item$Tmax <- apply(item[,item_Tmax1:item_Tmax12],1,max)
+      item$Tmax_wt <- apply(item[,item_Tmax1:item_Tmax3],1,max)
+      item$Tmax_sm <- apply(item[,item_Tmax7:item_Tmax9],1,max)
+      item$Tmax_sp <- apply(item[,item_Tmax4:item_Tmax6],1,max)
+      item$Tmax_at <- apply(item[,item_Tmax10:item_Tmax12],1,max)
+    }
+    else{
+      item$Tmax <- rowMeans(item[c(which(names(item)=='Tmax01'):which(names(item)=='Tmax12'))])
+      item$Tmax_wt <- rowMeans(item[c(which(names(item)=='Tmax01'):which(names(item)=='Tmax03'))])
+      item$Tmax_sm <- rowMeans(item[c(which(names(item)=='Tmax07'):which(names(item)=='Tmax09'))])
+      item$Tmax_sp <- rowMeans(item[c(which(names(item)=='Tmax04'):which(names(item)=='Tmax06'))])
+      item$Tmax_at <- rowMeans(item[c(which(names(item)=='Tmax10'):which(names(item)=='Tmax12'))])
+    }
   }
   if('Tmin' %in% var){
-    item$Tmin <- rowMeans(item[c(which(names(item)=='Tmin01'):which(names(item)=='Tmin12'))])
-    item$Tmin_wt <- rowMeans(item[c(which(names(item)=='Tmin01'):which(names(item)=='Tmin03'))])
-    item$Tmin_sm <- rowMeans(item[c(which(names(item)=='Tmin07'):which(names(item)=='Tmin09'))])
-    item$Tmin_sp <- rowMeans(item[c(which(names(item)=='Tmin04'):which(names(item)=='Tmin06'))])
-    item$Tmin_at <- rowMeans(item[c(which(names(item)=='Tmin10'):which(names(item)=='Tmin12'))])
+    if(isTRUE(TminMin)){
+      item_Tmin1 <- which(names(item)=='Tmin01')
+      item_Tmin3 <- which(names(item)=='Tmin03')
+      item_Tmin4 <- which(names(item)=='Tmin04')
+      item_Tmin6 <- which(names(item)=='Tmin06')
+      item_Tmin7 <- which(names(item)=='Tmin07')
+      item_Tmin9 <- which(names(item)=='Tmin09')
+      item_Tmin10 <- which(names(item)=='Tmin10')
+      item_Tmin12 <- which(names(item)=='Tmin12')
+      item$Tmin <- apply(item[,item_Tmin1:item_Tmin12],1,min)
+      item$Tmin_wt <- apply(item[,item_Tmin1:item_Tmin3],1,min)
+      item$Tmin_sm <- apply(item[,item_Tmin7:item_Tmin9],1,min)
+      item$Tmin_sp <- apply(item[,item_Tmin4:item_Tmin6],1,min)
+      item$Tmin_at <- apply(item[,item_Tmin10:item_Tmin12],1,min)
+    }
+    else{
+      item$Tmin <- rowMeans(item[c(which(names(item)=='Tmin01'):which(names(item)=='Tmin12'))])
+      item$Tmin_wt <- rowMeans(item[c(which(names(item)=='Tmin01'):which(names(item)=='Tmin03'))])
+      item$Tmin_sm <- rowMeans(item[c(which(names(item)=='Tmin07'):which(names(item)=='Tmin09'))])
+      item$Tmin_sp <- rowMeans(item[c(which(names(item)=='Tmin04'):which(names(item)=='Tmin06'))])
+      item$Tmin_at <- rowMeans(item[c(which(names(item)=='Tmin10'):which(names(item)=='Tmin12'))])
+    }
   }
   if('Tave' %in% var){
     item$Tave <- rowMeans(item[c(which(names(item)=='Tave01'):which(names(item)=='Tave12'))])
