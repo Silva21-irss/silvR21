@@ -1,5 +1,7 @@
 #' Rasterize Climate data from ClimateNA
 #'
+#' This function uses a CSV input to produce a raster file from a desired climate column based on the longitude and latitude of that point.
+#'
 #' @param Longitude The data frame column including the Longitudinal data
 #' @param Latitude The data frame column including the Latitudinal data
 #' @param Value numeric. The data frame column including the raster pixel values

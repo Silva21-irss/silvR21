@@ -30,7 +30,7 @@ CSVtoTIFF(
 A raster representative of the climate data acquired through ClimateNA
 }
 \description{
-Rasterize Climate data from ClimateNA
+This function uses a CSV input to produce a raster file from a desired climate column based on the longitude and latitude of that point.
 }
 \examples{
 #data <- read.csv('climateNA_monthlyDataOutput.csv')
