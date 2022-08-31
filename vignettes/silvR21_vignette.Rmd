@@ -106,7 +106,11 @@ projClimateNA20Y('site_DEM.csv','M','E:/ClimateNA_v30/ClimateNA_v7.30.exe')
 # Access only the 8GCM ensemble for the two "worst-case" SSP scenarios in the last 40 years of the 21st Century
 projClimateNA20Y('site_DEM.csv','M','E:/ClimateNA_v30/ClimateNA_v7.30.exe', scen = '8GCM', ssp = c('S3','S5'), years = c('Y4','Y5'))
 ```
-The outputs from this function will be located within the folder in the application's directory named after the input CSV file. Each output file is appropriately named after the GCM, SSP, and time frame it represents. The use of `gcmSepCols` divides the elements of the file name into three manageable columns
+The outputs from this function will be located within the folder in the application's directory named after the input CSV file. Each output file is appropriately named after the GCM, SSP, and time frame it represents. 
+
+The `projClimateNA` tool has been included in the version 1.4 which grants the user the ability to also search for 30 years normals and annual projections, along with 20 years normals. Use it in the same fashion as `projClimateNA20Y`.
+
+The use of `gcmSepCols` divides the elements of the file name into three manageable columns
 ```{r line 4, eval=FALSE}
 projFile <- "ACCESS-ESM1-5_ssp370_2061-2080.csv"
 gcmSepCols(projFile)

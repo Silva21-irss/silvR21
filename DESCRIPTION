@@ -1,6 +1,6 @@
 Package: silvR21
 Title: Processing Tools for the Silva21 Project
-Version: 1.3.0
+Version: 1.4.0
 Author: Michael Burnett
 Maintainer: Michael Burnett <mdmbur19@mail.ubc.ca>
 Description: This package was created for simplifying the means of acquiring climate data from ClimateNA. The default options are the selections used within Silva21.
