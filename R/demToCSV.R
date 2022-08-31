@@ -4,6 +4,7 @@
 #'
 #' @param file A TIFF file at the desired spatial resolution.
 #' @param outdir The output location for the formatted CSV file. The default is the same location as input.
+#' @param srs string. A valid WKT string or SRS definition, such as "EPSG:4326" or "ESRI:102761" or NULL
 #'
 #' @return A CSV file representing the inputted DEM
 #' @export
@@ -16,10 +17,10 @@
 #' #files <- list.files(pattern='*.tif$')
 #' #roiDEM <- files[3]
 #' #demToCSV(roiDEM)
-demToCSV <- function(file,outdir = dirname(file)){
+demToCSV <- function(file,outdir = dirname(file), srs = "EPSG:4326"){
   fileN <- basename(file)
   ras <- raster::raster(file) # Read raster
-  r <- raster::projectRaster(ras,crs=sp::CRS(SRS_string = "EPSG:4326"))
+  r <- raster::projectRaster(ras,crs=sp::CRS(SRS_string = srs))
   r_df <- raster::as.data.frame(r, xy = T, na.rm=  T)
   # pts <- raster::rasterToPoints(ras,spatial=TRUE) # Convert raster to points featureclass
   # raster::shapefile(pts,paste0(substr(file,1,nchar(file)-4),'.shp'),overwrite=TRUE) # Save shapefile

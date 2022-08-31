@@ -24,13 +24,16 @@ projClimateNA20Y(
 
 \item{ssp}{The SSP scenario selection. Options include : 'S1' (ssp126); 'S2' (ssp245); 'S3' (ssp370); 'S5' (ssp585).}
 
-\item{years}{The 20-years time frames selection. Options include : 'Y1' (2001-2020); 'Y2' (2021-2040); 'Y3' (2041-2060); 'Y4' (2061-2080); 'Y5' (2081-2100).}
+\item{years}{string. The 20-years or 30-years time frames selection. Options include : 'Y1' (2001-2020); 'Y2' (2021-2040); 'Y3' (2041-2060); 'Y4' (2061-2080); 'Y5' (2081-2100); 'Y_1' (2011-2040); 'Y_2' (2041-2070); 'Y_3' (2071-2100).}
 }
 \value{
 CSV files within a new folder within the current directory
 }
 \description{
 This is a specialty function that has several preliminary requirements for accessing climate projections within a given site. The output produces the projected climate variables for the provided CSV file. In order to properly use this function, the following steps much be taken. The steps include : 1. Set the working directory to where the ClimateNA app is located on your computer. 2. Prepare the CSV file so that it is compatible with the ClimateNA requirements. 3. Relocate the CSV file so it is located within the ClimateNA app directory.
+}
+\details{
+Support for this tool had been discontinued due to the creation of projClimateNA()
 }
 \examples{
 rm(list=ls())

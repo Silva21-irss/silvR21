@@ -4,12 +4,14 @@
 \alias{demToCSV}
 \title{Convert a Raster DEM file to a Useable CSV that can be inputted into ClimateNA}
 \usage{
-demToCSV(file, outdir = dirname(file))
+demToCSV(file, outdir = dirname(file), srs = "EPSG:4326")
 }
 \arguments{
 \item{file}{A TIFF file at the desired spatial resolution.}
 
 \item{outdir}{The output location for the formatted CSV file. The default is the same location as input.}
+
+\item{srs}{string. A valid WKT string or SRS definition, such as "EPSG:4326" or "ESRI:102761" or NULL}
 }
 \value{
 A CSV file representing the inputted DEM
