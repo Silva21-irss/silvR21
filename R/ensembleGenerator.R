@@ -48,15 +48,15 @@ ensembleGenerator <- function(files,tFrame = c('M','S','Y'),var = c('Tmax','Tmin
 
   ye <- list()
   #if(is.null(years)){years <- c('Y1','Y2','Y3','Y4','Y5')}
-  if('Y1' %in% years){ye <- append(ye,"2001-2020.csv")}
-  if('Y2' %in% years){ye <- append(ye,"2021-2040.csv")}
-  if('Y3' %in% years){ye <- append(ye,"2041-2060.csv")}
-  if('Y4' %in% years){ye <- append(ye,"2061-2080.csv")}
-  if('Y5' %in% years){ye <- append(ye,"2081-2100.csv")}
+  if('Y1' %in% years){ye <- append(ye,"_2001-2020.csv")}
+  if('Y2' %in% years){ye <- append(ye,"_2021-2040.csv")}
+  if('Y3' %in% years){ye <- append(ye,"_2041-2060.csv")}
+  if('Y4' %in% years){ye <- append(ye,"_2061-2080.csv")}
+  if('Y5' %in% years){ye <- append(ye,"_2081-2100.csv")}
   # Run through 30 years periods
-  if('Y_1' %in% years){ye <- append(ye,"2011-2040.csv")}
-  if('Y_2' %in% years){ye <- append(ye,"2041-2070.csv")}
-  if('Y_3' %in% years){ye <- append(ye,"2071-2100.csv")}
+  if('Y_1' %in% years){ye <- append(ye,"_2011-2040.csv")}
+  if('Y_2' %in% years){ye <- append(ye,"_2041-2070.csv")}
+  if('Y_3' %in% years){ye <- append(ye,"_2071-2100.csv")}
 
   # Run through individual years
   for(i in years){
@@ -76,7 +76,7 @@ ensembleGenerator <- function(files,tFrame = c('M','S','Y'),var = c('Tmax','Tmin
   a <- 1
   for(s in SSPs){
     for(y in ye){
-      SSPs[a] <- paste(s,y,sep='_')
+      SSPs[a] <- paste0(s,y)
       a <- a+1
     }
   }
@@ -181,7 +181,7 @@ ensembleGenerator <- function(files,tFrame = c('M','S','Y'),var = c('Tmax','Tmin
     }
     names(myfiles[[1]])
     for(x in colnames(myfiles[[1]])[4:ncol(myfiles[[1]])]){
-      GCM <- myfiles[[1]][1:3] # Use the first 4 columns and save them
+      GCM <- myfiles[[1]][,1:3] # Use the first 4 columns and save them
       for(y in 1:nrow(myfiles[[1]])){
         px <- list()
         for(a in 1:list.length){
