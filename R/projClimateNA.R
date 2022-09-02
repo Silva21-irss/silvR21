@@ -91,14 +91,16 @@ projClimateNA <- function(file,tFrame,exe, scen = c('ACC','CNRM','EC','GFDL','GI
   }
 
   # Run through individual years
-  if(substr(years,1,1) == "2"){
-    if(as.numeric(years) < 2010){stop("Don't be silly! Must be a year after 2010")}
-    if(as.numeric(years) > 2100){stop("Don't be silly! Must be a year before 2101")}
-    ye <- append(ye,paste0("@",years))
-    GCMs20 <- list()
-    for(a in sce){ # Loop through other projection parameters
-      for(b in SSPs){
-        GCMs20 <- rbind(GCMs20,paste0(a,'_',b,'@',years,'.gcm'))
+  for(i in years){
+    if(substr(i,1,1) == "2"){
+      if(as.numeric(i) < 2010){stop("Don't be silly! Must be a year after 2010")}
+      if(as.numeric(i) > 2100){stop("Don't be silly! Must be a year before 2101")}
+      ye <- append(ye,paste0("@",i))
+      GCMs20 <- list()
+      for(a in sce){ # Loop through other projection parameters
+        for(b in SSPs){
+          GCMs20 <- rbind(GCMs20,paste0(a,'_',b,'@',i,'.gcm'))
+        }
       }
     }
   }
