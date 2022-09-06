@@ -18,6 +18,7 @@
 #' @importFrom dplyr %>%
 #' @importFrom utils write.csv
 #' @importFrom data.table fread fwrite
+#' @importFrom stringr str_extract
 #'
 #' @examples
 #' #files <- list.files(pattern='*.csv$') # Access all CSV files
@@ -57,6 +58,8 @@ ensembleGenerator <- function(files,tFrame = c('M','S','Y'),var = c('Tmax','Tmin
   if('Y_1' %in% years){ye <- append(ye,"_2011-2040.csv")}
   if('Y_2' %in% years){ye <- append(ye,"_2041-2070.csv")}
   if('Y_3' %in% years){ye <- append(ye,"_2071-2100.csv")}
+
+  sce <- unique(str_extract(files,"[A-Za-z0-9-]*"))
 
   # Run through individual years
   for(i in years){
@@ -201,12 +204,19 @@ ensembleGenerator <- function(files,tFrame = c('M','S','Y'),var = c('Tmax','Tmin
     setwd(paste0(getwd(),'/GCMensemble'))
     files <- list.files(pattern='*csv$')
 
-    data <- data.table::fread(files[1])
-    names(data)[5] <- gsub('.csv','',files[1])
-    for(i in 2:length(files)){
+    # Create data frame for all data
+    data <- data.frame(matrix(ncol = length(files)+3,nrow = nrow(data.table::fread(files[1]))))
+    n <- c('Latitude','Longitude','Elevation',files) # Add column names
+    n <- gsub('.csv','',n) # Remove .csv from column names
+    names(data) <- n
+
+    data[c(1:4)] <- data.table::fread(files[1])
+    #names(data)[4] <- gsub('.csv','',files[1])
+    for(i in c(2:length(files))){
       item <- data.table::fread(files[i])
-      data[i+4] <- item[5]
-      names(data)[i+4] <- gsub('.csv','',files[i])
+      if('Value' %in% names(item)){data[i+3] <- item$Value}
+      else{stop("Don't be all silly and change the names of your raw climate data columns. The value column MUST be named 'Value'")}
+      #names(data)[i+4] <- gsub('.csv','',files[i])
     }
     setwd('..') # Go back one folder
     data.table::fwrite(data,paste0(as.character(list.length),'GCMensemble_Megafile.csv'))

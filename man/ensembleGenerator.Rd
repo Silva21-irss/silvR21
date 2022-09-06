@@ -6,7 +6,6 @@
 \usage{
 ensembleGenerator(
   files,
-  outdir = getwd(),
   tFrame = c("M", "S", "Y"),
   var = c("Tmax", "Tmin", "PPT", "DD5", "NFFD", "PAS", "CMI"),
   ssp = c("S1", "S2", "S3"),
@@ -16,8 +15,6 @@ ensembleGenerator(
 }
 \arguments{
 \item{files}{The list of files provided by the projClimateNA20Y output, after using the AnnualSeasonalMeans function to process annual and seasonal averages/sums.}
-
-\item{outdir}{The output directory to store the ensembles. This does not need to be the current working directory.}
 
 \item{tFrame}{The variable time frames included in the climate data. If the AnnualSeasonalMeans tool has been used, then the default value is desired. Otherwise, 'M' represents monthly, 'S' represents seasonal, and 'Y' represents annual time frames.}
 
