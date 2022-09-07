@@ -77,17 +77,19 @@ projClimateNA <- function(file,tFrame,exe, scen = c('ACC','CNRM','EC','GFDL','GI
   if('Y_3' %in% years){ye <- append(ye,"2071-2100")}
 
   # If using a time frame, find GCMs from list
-  if(substr(years,1,1) == 'Y'){
-    GCMs20 <- list.files(path=paste0(direc,'/GCMdat/20YearPeriod'))
-    GCMs20 <- rbind(GCMs20,list.files(path=paste0(direc,'/GCMdat')))
+  for(y in years){
+    if(substr(y,1,1) == 'Y'){
+      GCMs20 <- list.files(path=paste0(direc,'/GCMdat/20YearPeriod'))
+      GCMs20 <- rbind(GCMs20,list.files(path=paste0(direc,'/GCMdat')))
 
-    # Sieve through the GCMs20 list and keep only the relevant GCMs
-    sce <- paste(sce,collapse = '|')
-    GCMs20 <- grep(pattern = sce,x = GCMs20,value = TRUE)
-    SSPs <- paste(SSPs, collapse = '|')
-    GCMs20 <- grep(pattern = SSPs,x = GCMs20,value = TRUE)
-    ye <- paste(ye,collapse = '|')
-    GCMs20 <- grep(pattern = ye,x = GCMs20,value = TRUE)
+      # Sieve through the GCMs20 list and keep only the relevant GCMs
+      sce <- paste(sce,collapse = '|')
+      GCMs20 <- grep(pattern = sce,x = GCMs20,value = TRUE)
+      SSPs <- paste(SSPs, collapse = '|')
+      GCMs20 <- grep(pattern = SSPs,x = GCMs20,value = TRUE)
+      ye <- paste(ye,collapse = '|')
+      GCMs20 <- grep(pattern = ye,x = GCMs20,value = TRUE)
+    }
   }
 
   # Run through individual years
